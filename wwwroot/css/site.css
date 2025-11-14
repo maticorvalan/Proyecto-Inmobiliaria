@@ -1,0 +1,114 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.text-volver{
+  text-decoration: none;
+  color:rgb(0, 0, 0);
+  padding: 10px 13px;
+  background-color: rgb(183, 181, 181);
+  border-radius: 8px;
+  margin-left: 20px;  
+}
+.text-volver:hover{
+  transform: translateY(-10px);
+  background-color:rgb(165, 162, 162);
+  font-size: bold;
+}
+
+.imagen-con-hover {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-eliminar-imagen {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;    
+}
+
+.imagen-con-hover:hover .btn-eliminar-imagen {
+    display: inline-block;
+}
+
+/* Quita bordes grises y mejora espaciado */
+.custom-pagination .page-item .page-link {
+    border: none;                 /* quita el borde gris */
+    margin: 0 4px;                 /* espacio entre números */
+    border-radius: 6px;            /* esquinas redondeadas */
+    color: #0d6efd;                /* azul Bootstrap */
+    font-weight: 500;
+    background-color: transparent; /* fondo limpio */
+    transition: all 0.2s ease;
+}
+
+.custom-pagination .page-item .page-link:hover {
+    background-color: #e9f2ff;     /* fondo sutil al pasar */
+    color: #0a58ca;
+}
+
+/* Estado activo */
+.custom-pagination .page-item.active .page-link {
+    background-color: #0d6efd;     /* azul Bootstrap */
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* Estado deshabilitado */
+.custom-pagination .page-item.disabled .page-link {
+    color: #6c757d;                /* gris suave */
+    background-color: transparent;
+}
+
+/* Ajuste de íconos (centrado y tamaño) */
+.custom-pagination .page-link i {
+    font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.7em;
+}
+
+.card {
+    border-radius: .5rem;
+}
+
+.card-header {
+    font-weight: 500;
+}
+

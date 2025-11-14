@@ -1,0 +1,130 @@
+@model IEnumerable<Proyecto_Inmobiliaria.Models.Inquilino>
+
+@{
+    ViewData["Title"] = "Inquilinos";
+    var Pagina = ViewBag.Pagina ?? 1;
+	var TotalPaginas = ViewBag.TotalPaginas ?? 1;
+}
+
+<h1 class="text-center">Inquilinos</h1>
+
+
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Buscar..." id="searchInput">
+    <div class="input-group-append">
+        <a asp-action="Editar" class="btn btn-primary">Crear nuevo</a>
+    </div>
+</div>
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewData["SuccessMessage"]
+    </div>
+}
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DNI)
+            </th>
+            <th>
+                Teléfono
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DNI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@item.id" title="Editar" class="btn btn-sm btn-warning mx-1">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a asp-action="Detalle" asp-route-id="@item.id" title="Detalle" class="btn btn-sm btn-info mx-1">
+                        <i class="fa fa-info"></i>
+                    </a>
+                    <form asp-action="Eliminar" asp-route-id="@item.id" method="post" style="display:inline;" 
+                        onsubmit="return confirm('¿Estás seguro de eliminar a @item.Nombre @item.Apellido?');">
+                        <button type="submit" title="Eliminar" class="btn btn-sm btn-danger mx-1">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Paginación -->
+<nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm custom-pagination">
+        @if (Pagina > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/Inquilino/Index?pagina=@(Pagina - 1)&estado=@ViewBag.EstadoActual" aria-label="Anterior">
+                    <i class="fa-solid fa-angles-left"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa-solid fa-angles-left"></i></span>
+            </li>
+        }
+
+        @for (int i = 1; i <= TotalPaginas; i++)
+        {
+            <li class="page-item @(i == Pagina ? "active" : "")">
+                <a class="page-link" href="~/Inquilino/Index?pagina=@i&estado=@ViewBag.EstadoActual">@i</a>
+            </li>
+        }
+
+        @if (Pagina < TotalPaginas)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/Inquilino/Index?pagina=@(Pagina + 1)&estado=@ViewBag.EstadoActual" aria-label="Siguiente">
+                    <i class="fa-solid fa-angles-right"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa-solid fa-angles-right"></i></span>
+            </li>
+        }
+    </ul>
+</nav>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="~/js/search.js"></script>
+}

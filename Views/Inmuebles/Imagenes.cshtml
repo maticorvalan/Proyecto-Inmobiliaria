@@ -1,0 +1,117 @@
+@model Proyecto_Inmobiliaria.Models.Inmueble
+
+@{
+    ViewData["Title"] = "Imágenes del Inmueble";
+}
+
+<h2>Imágenes del Inmueble: @Model.Direccion</h2>
+<hr />
+
+<div class="row">
+    <!-- Portada -->
+    <div class="col-md-6">
+        <h4>Portada</h4>
+        @if (!string.IsNullOrEmpty(Model.UrlPortada))
+        {
+            <img src="@Model.UrlPortada" class="img-thumbnail" style="max-width:100%;" />
+        }
+        else
+        {
+            <p>No hay portada disponible</p>
+        }
+
+        <form asp-controller="Inmuebles" asp-action="Portada" method="post" enctype="multipart/form-data" class="mt-2">
+            <input type="file" name="PortadaFile" class="form-control" required />
+            <input type="hidden" name="InmuebleId" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary mt-2">Subir Portada</button>
+        </form>
+    </div>
+
+    <!-- Galería -->
+    <div class="col-md-6">
+        <h4>Galería de Imágenes</h4>
+        <div id="galeriaActual" class="d-flex flex-wrap">
+            @if (Model.Imagenes.Any())
+            {
+                foreach (var img in Model.Imagenes)
+                {
+                    <div class="m-2 position-relative imagen-con-hover">
+                        <img src="@img.Url" class="img-thumbnail" style="max-width:150px;" />
+                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-imagen"
+                                onclick="eliminarImagen(@img.Id)">
+                            <i class="fa fa-close"></i>
+                        </button>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No hay imágenes interiores</p>
+            }
+        </div>
+
+        <form id="formInterior" enctype="multipart/form-data" onsubmit="subirImagenes(event)">
+            <input type="file" id="imagenes" name="imagenes" onchange="previsualizar(event)" accept="image/*" multiple class="form-control" required />            
+            <button type="submit" class="btn btn-success mt-2">Subir</button>
+        </form>
+
+        <div class="mt-3">
+            <h6>Previsualización:</h6>
+            <div id="preview" class="d-flex flex-wrap"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function previsualizar(event) {
+        $('#preview').empty();
+        const files = event.target.files;
+        if (!files) return;
+        //Iterar sobre los archivos seleccionados
+        [...files].forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#preview').append(`
+                    <div class="m-2">
+                        <img src="${e.target.result}" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
+                    </div>
+                `);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function subirImagenes(e) {
+        e.preventDefault();
+
+        let formData = new FormData();
+        let files = document.getElementById("imagenes").files;
+        for (let i = 0; i < files.length; i++) {
+            formData.append("imagenes", files[i]);
+        }
+
+        $.ajax({
+            url: "/Imagenes/Alta/@Model.Id",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function (res) {
+            location.reload(); // recarga la página para ver las nuevas imágenes
+        }).fail(function (err) {
+            alert("Error al subir imágenes: " + err.responseText);
+        });
+    }
+
+    function eliminarImagen(id) {
+        $.post("/Imagenes/Eliminar/" + id)
+            .done(function () {
+                location.reload();
+            })
+            .fail(function (err) {
+                alert("Error al eliminar imagen: " + err.responseText);
+            });
+    }
+</script>
+}

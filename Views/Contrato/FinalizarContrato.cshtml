@@ -1,0 +1,71 @@
+@model Proyecto_Inmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Finalizar Contrato";
+    var contratoOriginal = ViewBag.ContratoOriginal as Contrato;
+}
+
+<div class="container mt-5">
+    <h4 class="text-primary text-center">Finalizar Contrato</h4>
+    <p class="text-center text-muted">Contrato del Inquilino: @contratoOriginal?.Inquilino?.Nombre @contratoOriginal?.Inquilino?.Apellido</p>
+    <hr class="mb-4" />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Sección de Deudas y Multa -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    Resumen de Finalización
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.MesesAdeudados > 0)
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Meses adeudados:</strong> @ViewBag.MesesAdeudados mes(es)
+                            <span class="float-end fw-bold">@ViewBag.MontoDeuda.ToString("C")</span>
+                        </div>
+                    }
+                    <div class="alert alert-info">
+                        <strong>Multa por terminación anticipada:</strong>
+                        <span class="float-end fw-bold">@ViewBag.MontoMulta.ToString("C")</span>
+                    </div>
+                    <div class="alert alert-dark">
+                        <strong>Total a Pagar:</strong>
+                        <span class="float-end fw-bold">@((ViewBag.MontoDeuda + ViewBag.MontoMulta).ToString("C"))</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Finalización -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="GuardarFinalizacion" method="post">
+                        <input type="hidden" asp-for="id" />
+                        <input type="hidden" asp-for="FechaInicio" />
+                        <input type="hidden" asp-for="FechaFin" />
+                        <input type="hidden" asp-for="idInquilino" />
+                        <input type="hidden" asp-for="idInmueble" />
+                        <input type="hidden" asp-for="Monto" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FechaTerminacionEfectiva" class="form-label"></label>
+                            <input asp-for="FechaTerminacionEfectiva" class="form-control" type="date" />
+                            <span asp-validation-for="FechaTerminacionEfectiva" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" name="generarPagoMulta" value="true" id="generarPagoMulta">
+                            <label class="form-check-label" for="generarPagoMulta">
+                                Registrar el pago de la multa de <strong>@ViewBag.MontoMulta.ToString("C")</strong> ahora.
+                            </label>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Confirmar Finalización de Contrato</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+@model IEnumerable<Proyecto_Inmobiliaria.Models.Inmueble>
+
+@{
+    var propietario = ViewBag.Propietario as Proyecto_Inmobiliaria.Models.Propietario;
+    ViewData["Title"] = "Inmuebles de " + propietario.Nombre + " " + propietario.Apellido;
+}
+
+<h2>Inmuebles de @propietario.Nombre @propietario.Apellido</h2>
+<hr />
+
+<div class="row">
+    @if (Model.Any())
+    {
+        foreach (var inmueble in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <!-- Imagen de portada -->
+                    <div class="position-relative">
+                        @if (!string.IsNullOrEmpty(inmueble.UrlPortada))
+                        {
+                            <img src="@inmueble.UrlPortada" class="card-img-top" style="object-fit:cover; height:200px;" />
+                        }
+                        else
+                        {
+                            <img src="/Uploads/Inmuebles/SinImagen.jpg" class="card-img-top" style="object-fit:cover; height:200px;" />
+                        }
+                    </div>
+
+                    <!-- Datos del inmueble -->
+                    <div class="card-body">
+                        <h5 class="card-title">@inmueble.Direccion</h5>
+                        <p class="card-text">
+                            <strong>Uso:</strong> @inmueble.Uso <br />
+                            <strong>Tipo:</strong> @inmueble.Tipo <br />
+                            <strong>Ambientes:</strong> @inmueble.Ambientes <br />
+                            <strong>Precio:</strong> $@inmueble.Precio <br />
+                            <strong>Estado:</strong> @inmueble.Estado
+                        </p>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="card-footer text-center">
+                        <a asp-action="Edit" asp-route-id="@inmueble.Id" class="btn btn-primary btn-sm">Editar</a>
+                         @if (User.IsInRole("Administrador"))
+    					{ 
+                        <a asp-action="Eliminar" asp-route-id="@inmueble.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                        }
+                        <a asp-action="Imagenes" asp-route-id="@inmueble.Id" class="btn btn-secondary btn-sm">Imágenes</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No hay inmuebles registrados para este propietario.</p>
+        <div class="text-center mt-4">
+            <a asp-action="Index" asp-controller="Propietarios" class="text-volver">Volver a la lista</a>
+        </div>
+
+    }
+</div>

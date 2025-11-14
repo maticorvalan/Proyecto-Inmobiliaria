@@ -1,0 +1,137 @@
+@model IEnumerable<Proyecto_Inmobiliaria.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Index";
+    var rnd = new Random();
+    var Pagina = ViewBag.Pagina ?? 1;
+    var TotalPaginas = ViewBag.TotalPaginas ?? 1;
+}
+
+<h1>Listado de Inmuebles</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    
+    <div>
+        <a class="btn btn-primary" asp-action="Create" title="Crear nuevo inmueble">
+            <i class="fa fa-plus"></i> Crear Nuevo
+        </a>
+    </div>
+
+    
+   <form asp-action="Index" method="get" class="d-flex align-items-center">
+		<label for="fechaInicio" class="mr-1 mb-0" style="margin-right:4px;">Inicio:</label>
+		<input type="date" id="fechaInicio" name="fechaInicio" 
+			value="@ViewBag.FechaInicio" 
+			class="form-control form-control-sm mr-2"
+			style="border: solid 1px black;" />
+
+		<label for="fechaFin" class="mr-1 mb-0" style="margin-left: 10px; margin-right:4px;">Fin:</label>
+		<input type="date" id="fechaFin" name="fechaFin" 
+			value="@ViewBag.FechaFin" 
+			class="form-control form-control-sm mr-2"
+			style="border: solid 1px black;"/>
+
+
+		<button type="submit" class="btn btn-primary btn-sm mr-1" style="margin-left:5px; " title="Filtrar fechas">
+			<i class="fa fa-filter"></i>
+		</button>
+		<a asp-action="Index" class="btn btn-sm text-white"  style="margin-left: 5px;background-color: #5bc0de;" title="Limpiar fechas">
+			<i class="fa fa-eraser"></i>
+		</a>
+	</form>
+
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Direccion)</th>
+            <th>@Html.DisplayNameFor(model => model.Uso)</th>
+            <th>@Html.DisplayNameFor(model => model.Tipo)</th>
+            <th>@Html.DisplayNameFor(model => model.Ambientes)</th>
+            <th>@Html.DisplayNameFor(model => model.Superficie)</th>
+            <th>@Html.DisplayNameFor(model => model.Estado)</th>
+            <th>@Html.DisplayNameFor(model => model.Precio)</th>
+            <th>@Html.DisplayNameFor(model => model.IdPropietario)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Direccion</td>
+                <td>@item.Uso</td>
+                <td>@item.Tipo</td>
+                <td>@item.Ambientes</td>
+                <td>@item.Superficie m²</td>
+                <td>@item.Estado</td>
+                <td>$ @item.Precio</td>
+                <td>
+                    @($"ID: {item.Propietario.Id} / {item.Propietario.Nombre} {item.Propietario.Apellido} / {item.Propietario.Dni}")
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id" title="Editar Inmueble">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-secondary" asp-action="Imagenes" asp-route-id="@item.Id" title="Ver imágenes">
+                            <i class="fa fa-picture-o"></i>
+                        </a>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a class="btn btn-danger" asp-action="Eliminar" asp-route-id="@item.Id" title="Eliminar Inmueble">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Paginación -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Pagina > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pagina="@(Pagina - 1)" asp-route-fechaInicio="@ViewBag.FechaInicio" asp-route-fechaFin="@ViewBag.FechaFin">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-arrow-left"></i></span>
+            </li>
+        }
+
+        @for (int i = 1; i <= TotalPaginas; i++)
+        {
+            <li class="page-item @(i == Pagina ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pagina="@i" asp-route-fechaInicio="@ViewBag.FechaInicio" asp-route-fechaFin="@ViewBag.FechaFin">@i</a>
+            </li>
+        }
+
+        @if (Pagina < TotalPaginas)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pagina="@(Pagina + 1)" asp-route-fechaInicio="@ViewBag.FechaInicio" asp-route-fechaFin="@ViewBag.FechaFin">
+                    <i class="fa fa-arrow-right"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-arrow-right"></i></span>
+            </li>
+        }
+    </ul>
+</nav>

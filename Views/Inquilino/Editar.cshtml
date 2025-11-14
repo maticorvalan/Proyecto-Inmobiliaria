@@ -1,0 +1,77 @@
+@model Proyecto_Inmobiliaria.Models.Inquilino
+@{
+    ViewData["Title"] = "Inquilino";
+    int id = Model == null ? 0 : Model.id;
+}
+
+<div class="container mt-5">
+    <h4 class="text-primary text-center">
+        @(id == 0 ? "Crear Inquilino" : "Modificar Inquilino")
+    </h4>
+    <hr class="mb-4" />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="Guardar" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+
+                        @if (id != 0)
+                        {
+                            <div class="form-group mb-3">
+                                <label class="form-label">Código</label>
+                                <input name="IdInquilino" class="form-control bg-light text-muted" value="@id" readonly />
+                            </div>
+                        }
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Nombre" class="form-label">Nombre</label>
+                            <input asp-for="Nombre" class="form-control" required pattern="^[a-zA-Z\s]+$"
+                                title="El Nombre solo debe contener letras y espacios" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Apellido" class="form-label">Apellido</label>
+                            <input asp-for="Apellido" class="form-control" required pattern="^[a-zA-Z\s]+$"
+                                title="El Apellido solo debe contener letras y espacios" />
+                            <span asp-validation-for="Apellido" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="DNI" class="form-label">DNI</label>
+                            <input asp-for="DNI" class="form-control" required pattern="^[a-zA-Z0-9]+$"
+                                title="El DNI solo puede contener letras y números, sin espacios ni caracteres especiales" />
+                            <span asp-validation-for="DNI" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Telefono" class="form-label">Teléfono</label>
+                            <input asp-for="Telefono" class="form-control"/>
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Correo Electrónico</label>
+                            <input asp-for="Email" class="form-control" required type="email"
+                                title="Por favor, introduzca un correo electrónico válido" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-50">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

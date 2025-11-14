@@ -1,0 +1,83 @@
+@model Pago
+
+@{
+    ViewData["Title"] = "Pagos";
+}
+
+<div class="container mt-5">
+    <h4 class="text-primary text-center">Gestión de Pago</h4>
+    <hr class="mb-4" />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="Guardar" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+                        <div class="form-group mb-3">
+                            <input asp-for="Multa" type="hidden" value="@Model.Multa" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="id" class="form-label">ID Pago</label>
+                            <input asp-for="id" class="form-control" readonly />
+
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FechaPago" class="form-label">Fecha de Pago</label>
+                            <input asp-for="FechaPago" class="form-control" readonly />
+                            <span asp-validation-for="FechaPago" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Monto" class="form-label">Monto</label>
+                            <input asp-for="Monto" type="number" class="form-control" readonly />
+                            <span asp-validation-for="Monto" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Detalle" class="form-label">Detalle</label>
+                            <input asp-for="Detalle" class="form-control" required />
+                            <span asp-validation-for="Detalle" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Estado" class="form-label">Estado</label>
+                            <select asp-for="Estado" class="form-control" required>
+                                <option value="Pagado" selected>Pagado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                            <span asp-validation-for="Estado" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="IdContrato" class="form-label">Contrato</label>
+                            <input type="hidden" asp-for="IdContrato" value="@ViewBag.Contrato?.id" />
+                            <input type="text" class="form-control" value="@ViewBag.Contrato.ToString()" readonly />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-50">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const montoInput = document.querySelector('input[asp-for="Monto"]');
+        
+        if (montoInput) {
+            let monto = parseFloat(montoInput.value || '0').toFixed(2);
+            montoInput.value = monto;
+        }
+    });
+</script>

@@ -1,0 +1,31 @@
+@model IEnumerable<Proyecto_Inmobiliaria.Models.Auditoria>
+
+@{
+    ViewData["Title"] = "Auditoria";
+}
+
+
+<h1 class="mb-4">Auditoria</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Acción</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Detalle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auditoria in Model)
+        {
+            <tr>
+                <td>@auditoria.id</td>
+                <td>@auditoria.Accion</td>
+                <td>@auditoria.Usuario</td>
+                <td>@auditoria.Fecha</td>
+                <td>@auditoria.Detalle</td>
+            </tr>
+        }
+    </tbody>
+</table>

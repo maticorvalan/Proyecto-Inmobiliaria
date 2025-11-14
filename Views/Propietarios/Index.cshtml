@@ -1,0 +1,132 @@
+@model IEnumerable<Proyecto_Inmobiliaria.Models.Propietario>
+
+@{
+    ViewData["Title"] = "Propietarios";
+    var rnd = new Random();
+	var Pagina = ViewBag.Pagina ?? 1;
+    var TotalPaginas = ViewBag.TotalPaginas ?? 1;
+}
+
+<h1>Propietarios</h1>
+
+<div class="btn-group pull-left">
+    <a class="btn btn-primary"  asp-action="Create" title="Crear">Crear Nuevo</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @item.Nombre
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id" title="Editar Propietario">
+                            <i class="fa fa-edit"></i>
+                        </a>                       
+                        <a class="btn btn-secondary" asp-action="PorPropietario" asp-controller="Inmuebles"
+                           asp-route-id="@item.Id" title="Ver Inmuebles del Propietario">
+                            <i class="fa fa-building"></i>
+                        </a>
+                        @if (User.IsInRole("Administrador"))
+    					{ 
+                        <a class="btn btn-danger" asp-action="Eliminar" asp-route-id="@item.Id" title="Eliminar Propietario">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Paginacion -->
+<nav aria-label="Page navigation">
+	<ul class="pagination">
+		<!-- Botón "Anterior" -->
+		@if (Pagina > 1)
+		{
+			<li class="page-item">
+				<a class="page-link" asp-action="Index" asp-controller="Propietarios" asp-route-pagina="@(Pagina - 1)">
+    				<i class="fa fa-arrow-left"></i>
+				</a>
+			</li>
+		}
+		else
+		{
+			<li class="page-item disabled">
+				<span class="page-link"><i class="fa-solid fa-angles-left"></i></span>
+			</li>
+		}
+
+		<!-- Números de página -->
+		@for (int i = 1; i <= TotalPaginas; i++)
+		{
+			<li class="page-item @(i == Pagina ? "active" : "")">
+				<a class="page-link" asp-action="Index" asp-controller="Propietarios" asp-route-pagina="@i">@i</a>
+			</li>
+		}
+		<!-- Botón "Siguiente" -->
+		@if (Pagina < TotalPaginas)
+		{
+			<li class="page-item">
+				<a class="page-link" asp-action="Index" asp-controller="Propietarios" asp-route-pagina="@(Pagina + 1)" aria-label="Siguiente">
+					<i class="fa fa-arrow-right"></i>
+				</a>
+			</li>
+		}
+		else
+		{
+			<li class="page-item disabled">
+				<span class="page-link"><i class="fa-solid fa-angles-right"></i></span>
+			</li>
+		}		
+	</ul>
+</nav>

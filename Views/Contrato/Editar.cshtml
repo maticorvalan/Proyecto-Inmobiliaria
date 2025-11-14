@@ -1,0 +1,86 @@
+@model Proyecto_Inmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Contrato";
+    int id = Model?.id ?? 0;
+}
+
+<div class="container mt-5">
+    <h4 class="text-primary text-center">
+        @(id == 0 ? "Crear Contrato" : "Gestion del Contrato")
+    </h4>
+    <hr class="mb-4" />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="Guardar" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+
+                        @if (id != 0)
+                        {
+                            <div class="form-group mb-3">
+                                <label class="form-label">ID Contrato</label>
+                                <input name="id" class="form-control bg-light text-muted" value="@id" readonly />
+                            </div>
+                        }
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FechaInicio" class="form-label">Fecha de Inicio</label>
+                            <input asp-for="FechaInicio" class="form-control" type="date" required />
+                            <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FechaFin" class="form-label">Fecha de Finalizacion</label>
+                            <input asp-for="FechaFin" class="form-control" type="date" required />
+                            <span asp-validation-for="FechaFin" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Monto" class="form-label">Monto del Alquiler</label>
+                            <input asp-for="Monto" class="form-control" required pattern="^\d+(\.\d{1,2})?$"
+                                title="El Monto debe ser un número válido con hasta dos decimales" />
+                            <span asp-validation-for="Monto" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input asp-for="Estado" class="form-check-input" type="checkbox" />
+                            <label asp-for="Estado" class="form-check-label">Estado del Alquiler</label>
+                            <span asp-validation-for="Estado" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="idInquilino" class="form-label">Inquilino</label>
+                            <select asp-for="idInquilino" class="form-control" required>
+                                <option value="">Seleccione un Inquilino</option>
+                                @foreach (var item in ViewBag.Inquilino)
+                                {
+                                    <option value="@item.id">@($"{item.Nombre} {item.Apellido}")</option>
+                                }
+                            </select>
+                            <span asp-validation-for="idInquilino" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="idInmueble" class="form-label">Inmueble</label>
+                            <select asp-for="idInmueble" class="form-control" required>
+                                <option value="">Seleccione un inmueble</option>
+                                @foreach (var item in ViewBag.Inmueble)
+                                {
+                                    <option value="@item.Id">@($"{item.Direccion}")</option>
+                                }
+                            </select>
+                            <span asp-validation-for="idInmueble" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-50">Guardar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
