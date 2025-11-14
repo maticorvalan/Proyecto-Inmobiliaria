@@ -52,7 +52,7 @@ Este sistema informatiza la gestión de alquileres y administración de propieda
 
 1. **Clona el repositorio y entra a la carpeta del proyecto:**
    
-   git clone https://github.com/AngelBaroja/Proyecto-Inmobiliaria.git
+   git clone https://github.com/maticorvalan/Proyecto-Inmobiliaria.git
    cd Proyecto-Inmobiliaria 
 
 2. **Instala las dependencias:**  
